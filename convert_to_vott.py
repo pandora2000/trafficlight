@@ -105,9 +105,15 @@ for r, d, f in os.walk(mypath):
             jpg_files.append(os.path.join(r, file))
         if '.txt' in file:
             txt_files.append(os.path.join(r, file))
+template['tags'] = []
+for i in range(50):
+    template['tags'].append({
+        'name': f'{i}',
+        'color': '#ffffff'
+    })
 d = copy.deepcopy(template)
 i = 0
-for jpg_file in jpg_files[:10]:
+for jpg_file in jpg_files:
     t = f'{jpg_file[:-4]}.txt'
     k = jpg_file.split('/')
     jf = f'{target}/{k[-2]}__{k[-1]}'
@@ -143,10 +149,12 @@ for jpg_file in jpg_files[:10]:
                 y = height * y
                 w = width * w
                 h = height * h
-                if tag == '16' or tag == '17':
+                if True:
+                # if tag == '16' or tag == '15':
                     region = copy.deepcopy(region_template)
                     region['id'] = str(uuid.uuid1()).replace('-', '')
-                    region['tags'] = ['green'] if tag == '17' else ['red']
+                    # region['tags'] = ['green'] if tag == '16' else ['red']
+                    region['tags'] = [tag]
                     region['boundingBox'] = {
                         'left': x,
                         'top': y,
