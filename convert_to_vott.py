@@ -1,3 +1,4 @@
+# vottで古いプロジェクトを削除し、このプログラムで得られた.vottをopen local projectすればよい
 import os, shutil, copy, json, cv2, uuid
 template = {
     "name": "trafficlight",
@@ -105,14 +106,16 @@ for r, d, f in os.walk(mypath):
             jpg_files.append(os.path.join(r, file))
         if '.txt' in file:
             txt_files.append(os.path.join(r, file))
-template['tags'] = []
-for i in range(50):
-    template['tags'].append({
-        'name': f'{i}',
-        'color': '#ffffff'
-    })
+# tagとその色の設定
+# template['tags'] = []
+# for i in range(50):
+#     template['tags'].append({
+#         'name': f'{i}',
+#         'color': '#ffffff'
+#     })
 d = copy.deepcopy(template)
 i = 0
+annoi = 0
 for jpg_file in jpg_files:
     t = f'{jpg_file[:-4]}.txt'
     k = jpg_file.split('/')
@@ -134,6 +137,7 @@ for jpg_file in jpg_files:
     asset['state'] = 1
     asset['type'] = 1
     if t in txt_files:
+        annoi += 1
         asset['state'] = 2
         ind = {
             'asset': asset,
@@ -149,29 +153,31 @@ for jpg_file in jpg_files:
                 y = height * y
                 w = width * w
                 h = height * h
-                if True:
-                # if tag == '16' or tag == '15':
+                if tag == '16' or tag == '15':
                     region = copy.deepcopy(region_template)
                     region['id'] = str(uuid.uuid1()).replace('-', '')
-                    # region['tags'] = ['green'] if tag == '16' else ['red']
-                    region['tags'] = [tag]
+                    region['tags'] = ['green'] if tag == '16' else ['red']
+                    # region['tags'] = [tag]
+                    l = x - w / 2
+                    t = y - h / 2
                     region['boundingBox'] = {
-                        'left': x,
-                        'top': y,
+                        'left': l,
+                        'top': t,
                         'width': w,
                         'height': h
                     }
                     region['points'] = [
-                        { 'x': x, 'y': y },
-                        { 'x': x + w, 'y': y },
-                        { 'x': x + w, 'y': y + h },
-                        { 'x': x, 'y': y + h }
+                        { 'x': l, 'y': t },
+                        { 'x': l + w, 'y': t },
+                        { 'x': l + w, 'y': t + h },
+                        { 'x': l, 'y': t + h }
                     ]
                     ind['regions'].append(region)
         with open(f'{vott_target}/{aid}-asset.json', 'w') as f:
             f.write(json.dumps(ind))
-    d['assets'][aid] = asset
+        d['assets'][aid] = asset
     i += 1
     print(i)
+    print(annoi)
 with open(f'{vott_target}/trafficlight.vott', 'w') as f:
     f.write(json.dumps(d))
