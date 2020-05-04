@@ -33,7 +33,8 @@ def get_anno_xml_data(aid, width, height, objs):
 vott_path = '/home/zb/works/test/trafficlight/vott-target'
 vott_file_path = f'{vott_path}/trafficlight.vott'
 vott_data = None
-pascal_path = '/home/zb/works/test/trafficlight/pascal/myVOCdevkit/VOC2012'
+pascal_root_path = f'/home/zb/works/test/trafficlight/pascal'
+pascal_path = f'{pascal_root_path}/myVOCdevkit/VOC2012'
 pascal_anno_path = f'{pascal_path}/Annotations'
 pascal_imgset_path = f'{pascal_path}/ImageSets/Main'
 pascal_jpg_path = f'{pascal_path}/JPEGImages'
@@ -74,3 +75,5 @@ val_imgset = imgset[train_cnt:]
 for p, imgset in [['train', train_imgset], ['val', val_imgset]]:
     with open(f'{pascal_imgset_path}/aeroplane_{p}.txt', 'w') as f:
         f.write('\n'.join([f'{x} -1' for x in imgset]))
+os.system(f'cd {pascal_root_path}; tar -cvf myVOCdevkit.tar myVOCdevkit')
+shutil.copyfile(f'{pascal_root_path}/myVOCdevkit.tar', f'/home/zb/downloads/myVOCdevkit.tar')
