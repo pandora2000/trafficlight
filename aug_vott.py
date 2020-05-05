@@ -53,7 +53,7 @@ train_ind = int(round(len(aids) * 0.8))
 for aid in aids:
     print(ind)
     a = assets[aid]
-    path = a['path'].split(':')[1]
+    path = f'{args.root}/target/{a["name"]}'
     nim = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2RGB)
     height, width = nim.shape[:2]
     im = tf.convert_to_tensor(nim)
