@@ -1,5 +1,5 @@
 import argparse, time, os, sys
-print(sys.version, flush=True)
+print(sys.version)
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 from google.colab import auth
