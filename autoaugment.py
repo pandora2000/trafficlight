@@ -22,6 +22,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import numpy as np
 import random
 import inspect
 import math
@@ -162,7 +163,7 @@ def rand():
   return random.random()
 
 def policy_custom():
-  # rotateは10で30度傾く,equalize,posterizeはダメ,shear_xは正方形の場合右端が下がる場合右端では10で30%下がる
+  # rotateは10で30度傾く,equalize,posterize,colorはダメ,shear_xは正方形の場合右端が下がる場合右端では10で30%下がる
   policy = [
     [],
     [('TranslateX_BBox', 1, 8 * rand())],
@@ -170,14 +171,12 @@ def policy_custom():
     [('Rotate_BBox', 1, 5 * rand())],
     [('ShearX_BBox', 1, 2 * rand())],
     [('ShearY_BBox', 1, 2 * rand())],
-    [('Color', 1, 8 * rand())],
     [('SolarizeAdd', 1, 2 * rand())],
     [('AutoContrast', 1, 10 * rand())],
     [('Sharpness', 1, 8 * rand())],
     [('BBox_Cutout', 1, 5 + 5 * rand())],
     [('Cutout', 1, 5 + 5 * rand())],
-    [('Cutout', 1, 5 + 5 * rand())],
-    [('Cutout', 1, 5 + 5 * rand())],
+    [('Crop', 1, 0.3 * rand())],
   ]
   return policy
 
@@ -1381,6 +1380,25 @@ def bbox_cutout(image, bboxes, pad_fraction, replace_with_mean):
 
   return image, bboxes
 
+def _crop_bbox(bbox, w, h, nw, nh, pl, pt):
+  t, l, b, r = bbox
+  l, t, r, b = [l * w - pl, t * h - pt, r * w - pl, b * h - pt]
+  l, t, r, b = [0 if x < 0 else x for x in [l, t, r, b]]
+  l, t, r, b = [l / nw, t / nh, r / nw, b / nh]
+  return tf.convert_to_tensor(np.array([t, l, b, r], dtype=np.float32))
+
+
+def crop(image, bboxes, level):
+  size = 1 - level
+  h, w = tf.shape(image)[:2]
+  nh, nw = [tf.to_int32(tf.round(x)) for x in [tf.to_float(h) * size, tf.to_float(w) * size]]
+  # pl = random.randrange(w - nw + 1)
+  # pt = random.randrange(h - nh + 1)
+  pl = tf.random_uniform(dtype=tf.int32, minval=0, maxval=w - nw + 1, shape=())
+  pt = tf.random_uniform(dtype=tf.int32, minval=0, maxval=h - nh + 1, shape=())
+  crop_bbox_func = lambda bbox: _crop_bbox(bbox, tf.to_float(w), tf.to_float(h), tf.to_float(nw), tf.to_float(nh), tf.to_float(pl), tf.to_float(pt))
+  aug_bboxes = tf.map_fn(crop_bbox_func, bboxes)
+  return image[pt:pt + nh, pl:pl + nw], aug_bboxes
 
 NAME_TO_FUNC = {
     'AutoContrast': autocontrast,
@@ -1414,6 +1432,7 @@ NAME_TO_FUNC = {
     'Solarize_Only_BBoxes': solarize_only_bboxes,
     'Equalize_Only_BBoxes': equalize_only_bboxes,
     'Cutout_Only_BBoxes': cutout_only_bboxes,
+    'Crop': crop,
 }
 
 
@@ -1502,6 +1521,7 @@ def level_to_arg(hparams):
       'Cutout_Only_BBoxes': lambda level: (
           int((level/_MAX_LEVEL) * hparams.cutout_bbox_const),),
       # pylint:enable=g-long-lambda
+      'Crop': lambda level: (level,),
   }
 
 
