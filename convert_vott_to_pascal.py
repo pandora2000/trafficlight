@@ -1,4 +1,7 @@
-import os, shutil, copy, json, cv2, uuid
+import os, shutil, copy, json, cv2, uuid, argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--vott_root', required=True)
+parser.add_argument('--pascal_root', required=True)
 def get_anno_obj_xml_data(name, bndbox):
     return f"""<object>
 		<name>{name}</name>
@@ -30,10 +33,10 @@ def get_anno_xml_data(aid, width, height, objs):
         {obj_xmls}
 	<segmented>0</segmented>
     </annotation>"""
-vott_path = '/home/zb/works/test/trafficlight/vott-aug-target'
+vott_path = f'{args.vott_root}/vott-aug-target'
 vott_file_path = f'{vott_path}/trafficlight-aug.vott'
 vott_data = None
-pascal_root_path = f'/home/zb/works/test/trafficlight/pascal'
+pascal_root_path = args.pascal_root
 pascal_path = f'{pascal_root_path}/myVOCdevkit/VOC2012'
 pascal_anno_path = f'{pascal_path}/Annotations'
 pascal_imgset_path = f'{pascal_path}/ImageSets/Main'
