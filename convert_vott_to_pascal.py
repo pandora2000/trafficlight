@@ -78,5 +78,3 @@ for p in ['train', 'val']:
     timgset = [x for x in imgset if x.endswith(f'_{p}.jpg')]
     with open(f'{pascal_imgset_path}/aeroplane_{p}.txt', 'w') as f:
         f.write('\n'.join([f'{x} -1' for x in timgset]))
-os.system(f'cd {pascal_root_path}; tar -cvf myVOCdevkit.tar myVOCdevkit')
-shutil.copyfile(f'{pascal_root_path}/myVOCdevkit.tar', f'/home/zb/downloads/myVOCdevkit.tar')
