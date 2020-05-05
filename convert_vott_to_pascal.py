@@ -2,6 +2,7 @@ import os, shutil, copy, json, cv2, uuid, argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--vott_root', required=True)
 parser.add_argument('--pascal_root', required=True)
+args = parser.parse_args()
 def get_anno_obj_xml_data(name, bndbox):
     return f"""<object>
 		<name>{name}</name>
