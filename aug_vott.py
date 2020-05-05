@@ -25,7 +25,7 @@ new_data_base = {
         "id": "_YEEMU0Gv"
     }
 }
-def main(root_path):
+def main(root_path, limit):
     vott_src_path = f'{root_path}/vott-target'
     vott_src_file_path = f'{vott_src_path}/trafficlight.vott'
     vott_dst_path = f'{root_path}/vott-aug-target'
@@ -45,7 +45,9 @@ def main(root_path):
     new_data['assets'] = new_assets
     new_data.update(new_data_base)
     ind = 0
-    aids = list(assets.keys())[:]
+    aids = list(assets.keys())
+    if limit > -1:
+        aids = aids[:limit]
     # TODO: きちんと関連するものは別に分ける
     train_ind = int(round(len(aids) * 0.8))
     for aid in aids:
@@ -113,5 +115,6 @@ def main(root_path):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', required=True)
+    parser.add_argument('--limit', type=int, default=-1, required=True)
     args = parser.parse_args()
-    main(args.root)
+    main(args.root, args.limit)
