@@ -44,12 +44,10 @@ new_assets = {}
 new_data['assets'] = new_assets
 new_data.update(new_data_base)
 ind = 0
-aids = list(assets.keys())
+aids = list(assets.keys())[:]
 train_ind = int(round(len(aids) * 0.8))
-for aid in assets:
+for aid in aids:
     print(ind)
-    # if ind > 30:
-    #     break
     a = assets[aid]
     path = a['path'].split(':')[1]
     nim = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2RGB)
@@ -71,7 +69,7 @@ for aid in assets:
             nboxes = aug_boxes.numpy().tolist()
         else:
             nnim = nim
-            nboxes = boxes
+            nboxes = boxes.numpy().tolist()
         naid = f'{str(uuid.uuid1()).replace("-", "")}-{"train" if train else "val"}'
         na = copy.deepcopy(a)
         na['id'] = naid
@@ -87,7 +85,6 @@ for aid in assets:
         cv2.imwrite(npath, nnim)
         nanno = copy.deepcopy(anno)
         nanno['asset'] = na
-
         for reg, nbox in zip(nanno['regions'], nboxes):
             t, l, b, r = nbox
             l, t, r, b = [l * nw, t * nh, r * nw, b * nh]
