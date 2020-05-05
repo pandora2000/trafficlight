@@ -1,4 +1,5 @@
 import argparse, time, os, sys
+print(sys.version, flush=True)
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 from google.colab import auth
@@ -14,7 +15,6 @@ def upload_file_to_drive(drive, path):
     f = drive.CreateFile()
     f.SetContentFile(path)
     f.Upload()
-print(sys.version)
 parser = argparse.ArgumentParser()
 parser.add_argument('--root', required=True)
 args = parser.parse_args()
