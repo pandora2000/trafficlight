@@ -33,7 +33,7 @@ while True:
         latest_index = index
         ps = []
         for p2 in os.listdir('.'):
-            if not p2.startswith(f'model.ckpt-{index}.'):
+            if not p2.startswith(f'model.ckpt-{index}'):
                 continue
             ps.append(p2)
         for p2 in ps:
