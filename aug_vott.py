@@ -54,6 +54,7 @@ for aid in aids:
     print(ind)
     a = assets[aid]
     path = f'{args.root}/target/{a["name"]}'
+    print(path)
     nim = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2RGB)
     height, width = nim.shape[:2]
     im = tf.convert_to_tensor(nim)
