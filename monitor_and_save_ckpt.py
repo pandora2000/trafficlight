@@ -1,4 +1,4 @@
-import argparse, time, os
+import argparse, time, os, sys
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 from google.colab import auth
@@ -14,6 +14,7 @@ def upload_file_to_drive(drive, path):
     f = drive.CreateFile()
     f.SetContentFile(path)
     f.Upload()
+print(sys.version)
 parser = argparse.ArgumentParser()
 parser.add_argument('--root', required=True)
 args = parser.parse_args()
@@ -33,7 +34,7 @@ while True:
         latest_index = index
         ps = []
         for p2 in os.listdir('.'):
-            if not p2.startswith(f'model.ckpt-{index}'):
+            if not p2.startswith('model.ckpt-' + str(index) + '.'):
                 continue
             ps.append(p2)
         for p2 in ps:
