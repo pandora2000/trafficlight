@@ -114,5 +114,4 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', required=True)
     args = parser.parse_args()
-    os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
     main(args.root)
