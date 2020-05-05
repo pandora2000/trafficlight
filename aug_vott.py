@@ -1,4 +1,7 @@
-import os, shutil, copy, json, cv2, uuid, autoaugment, copy, tensorflow.compat.v1 as tf, numpy as np
+import os, shutil, copy, json, cv2, uuid, autoaugment, copy, tensorflow.compat.v1 as tf, numpy as np, argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--root', required=True)
+args = parser.parse_args()
 def get_boxes(width, height, regions):
     boxes = []
     for reg in regions:
@@ -25,10 +28,10 @@ new_data_base = {
         "id": "_YEEMU0Gv"
     }
 }
-vott_src_path = '/home/zb/works/test/trafficlight/vott-target'
+vott_src_path = f'{args.root}/vott-target'
 vott_src_file_path = f'{vott_src_path}/trafficlight.vott'
-vott_dst_path = '/home/zb/works/test/trafficlight/vott-aug-target'
-vott_dst_img_path = '/home/zb/works/test/trafficlight/vott-aug-source'
+vott_dst_path = f'{args.root}/vott-aug-target'
+vott_dst_img_path = f'{args.root}/vott-aug-source'
 vott_dst_file_path = f'{vott_dst_path}/trafficlight-aug.vott'
 vott_data = None
 for p in [vott_dst_path, vott_dst_img_path]:
@@ -45,6 +48,7 @@ new_data['assets'] = new_assets
 new_data.update(new_data_base)
 ind = 0
 aids = list(assets.keys())[:]
+# TODO: きちんと関連するものは別に分ける
 train_ind = int(round(len(aids) * 0.8))
 for aid in aids:
     print(ind)
