@@ -51,7 +51,7 @@ while True:
         time.sleep(10)
         continue
     name = datetime.now().strftime('%Y%m%d%H%M%S')
-    print(f'start uploading to {name}...')
+    print(f'start uploading to {name}...', flush=True)
     folder_id = create_folder_under_id_on_drive(
         drive, args.save_root_id, name
     )
@@ -59,9 +59,10 @@ while True:
         if not os.path.isfile(os.path.join(args.root, p)):
             continue
         upload_file_to_drive(drive, p, {'parents': [{'id': folder_id}]})
-    print(f'end upload to {name}...')
+    print(f'end upload to {name}...', flush=True)
     fs = list_drive_folder(drive, args.save_root_id)
     fs = sorted(fs, key=lambda x: x['title'])[::-1][2:]
     for f in fs:
         delete_file_from_drive(drive, f['id'])
+    print(f'end delete old folders', flush=True)
     time.sleep(30 * 60)
