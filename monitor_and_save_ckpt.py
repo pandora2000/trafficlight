@@ -59,7 +59,10 @@ while True:
         if not os.path.isfile(os.path.join(args.root, p)):
             continue
         print(f'uploading {p}...')
-        upload_file_to_drive(drive, p, {'parents': [{'id': folder_id}]})
+        try:
+            upload_file_to_drive(drive, p, {'parents': [{'id': folder_id}]})
+        except:
+            print(f'failed to upload {p}!')
     print(f'end upload to {name}...', flush=True)
     fs = list_drive_folder(drive, args.save_root_id)
     fs = sorted(fs, key=lambda x: x['title'])[::-1][2:]
