@@ -58,6 +58,7 @@ while True:
     for p in os.listdir():
         if not os.path.isfile(os.path.join(args.root, p)):
             continue
+        print(f'uploading {p}...')
         upload_file_to_drive(drive, p, {'parents': [{'id': folder_id}]})
     print(f'end upload to {name}...', flush=True)
     fs = list_drive_folder(drive, args.save_root_id)
