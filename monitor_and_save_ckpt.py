@@ -70,7 +70,7 @@ while True:
         upload_file(drive, p, folder_id)
     print(f'end upload to {name}...', flush=True)
     fs = list_drive_folder(drive, args.save_root_id)
-    fs = sorted(fs, key=lambda x: x['title'])[::-1][2:]
+    fs = sorted(fs, key=lambda x: x['title'])[::-1][4:]
     for f in fs:
         delete_file_from_drive(drive, f['id'])
     print(f'end delete old folders', flush=True)
