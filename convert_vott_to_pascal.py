@@ -1,4 +1,4 @@
-import os, shutil, copy, json, cv2, uuid, argparse
+import os, shutil, copy, json, cv2, uuid, argparse, random
 parser = argparse.ArgumentParser()
 parser.add_argument('--vott_root', required=True)
 parser.add_argument('--pascal_root', required=True)
@@ -50,10 +50,13 @@ with open(vott_file_path) as f:
 classes = ['aeroplane', 'bicycle']
 imgset = []
 ind = 0
-for aid in vott_data['assets']:
+assets = vott_data['assets']
+aids = list(assets.keys())
+random.shuffle(aids)
+for aid in aids:
     print(ind)
     imgset.append(aid)
-    a = vott_data['assets'][aid]
+    a = assets[aid]
     path = a['path'].split(':')[1]
     width = a['size']['width']
     height = a['size']['height']
