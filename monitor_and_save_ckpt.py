@@ -38,6 +38,12 @@ def list_drive_folder(drive, id):
     return ret
 def delete_file_from_drive(drive, id):
     drive.CreateFile({'id': id}).Delete()
+def upload_file(drive, name, folder_id):
+    print(f'uploading {name}...')
+    try:
+        upload_file_to_drive(drive, name, {'parents': [{'id': folder_id}]})
+    except:
+        print(f'failed to upload {name}!')
 parser = argparse.ArgumentParser()
 parser.add_argument('--root', required=True)
 parser.add_argument('--save_root_id', required=True)
@@ -58,11 +64,10 @@ while True:
     for p in os.listdir():
         if not os.path.isfile(os.path.join(args.root, p)):
             continue
-        print(f'uploading {p}...')
-        try:
-            upload_file_to_drive(drive, p, {'parents': [{'id': folder_id}]})
-        except:
-            print(f'failed to upload {p}!')
+        upload_file(drive, p, folder_id)
+    os.chdir('/tmp')
+    for p in ['monitor.log', 'main.log']:
+        upload_file(drive, p, folder_id)
     print(f'end upload to {name}...', flush=True)
     fs = list_drive_folder(drive, args.save_root_id)
     fs = sorted(fs, key=lambda x: x['title'])[::-1][2:]
