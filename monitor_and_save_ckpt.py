@@ -1,4 +1,4 @@
-import argparse, time, os, sys
+import argparse, time, os, sys, traceback
 print(sys.version)
 from datetime import datetime
 from pydrive.auth import GoogleAuth
@@ -13,8 +13,8 @@ def get_drive():
         auth.authenticate_user()
         gauth = GoogleAuth()
         gauth.credentials = GoogleCredentials.get_application_default()
-    except Exception as e:
-        print(e, flush=True)
+    except:
+        traceback.print_last()
         gauth = GoogleAuth()
         gauth.LocalWebserverAuth()
     return GoogleDrive(gauth)
