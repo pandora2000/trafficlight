@@ -51,8 +51,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--root', required=True)
 parser.add_argument('--save_root_id', required=True)
 args = parser.parse_args()
-drive = get_drive()
 latest_index = -1
+print(f'root: {args.root}')
+print(f'save_root_id: {args.save_root_id}')
 while True:
     try:
         os.chdir(args.root)
@@ -60,6 +61,7 @@ while True:
         time.sleep(10)
         continue
     print(f'getting drive...', flush=True)
+    drive = get_drive()
     print(f'got drive', flush=True)
     name = datetime.now().strftime('%Y%m%d%H%M%S')
     print(f'start uploading to {name}...', flush=True)
