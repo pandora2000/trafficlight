@@ -13,7 +13,8 @@ def get_drive():
         auth.authenticate_user()
         gauth = GoogleAuth()
         gauth.credentials = GoogleCredentials.get_application_default()
-    except:
+    except Exception as e:
+        print(e, flush=True)
         gauth = GoogleAuth()
         gauth.LocalWebserverAuth()
     return GoogleDrive(gauth)
