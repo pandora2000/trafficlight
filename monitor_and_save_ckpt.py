@@ -51,7 +51,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--root', required=True)
 parser.add_argument('--save_root_id', required=True)
 args = parser.parse_args()
-drive = get_drive()
 latest_index = -1
 while True:
     try:
@@ -59,6 +58,7 @@ while True:
     except:
         time.sleep(10)
         continue
+    drive = get_drive()
     name = datetime.now().strftime('%Y%m%d%H%M%S')
     print(f'start uploading to {name}...', flush=True)
     folder_id = create_folder_under_id_on_drive(
