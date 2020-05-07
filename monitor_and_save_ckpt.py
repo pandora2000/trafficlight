@@ -58,7 +58,9 @@ while True:
     except:
         time.sleep(10)
         continue
+    print(f'getting drive...', flush=True)
     drive = get_drive()
+    print(f'got drive', flush=True)
     name = datetime.now().strftime('%Y%m%d%H%M%S')
     print(f'start uploading to {name}...', flush=True)
     folder_id = create_folder_under_id_on_drive(
