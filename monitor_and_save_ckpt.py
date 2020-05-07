@@ -14,7 +14,9 @@ def get_drive():
         gauth = GoogleAuth()
         gauth.credentials = GoogleCredentials.get_application_default()
     except:
-        traceback.print_last()
+        ex_info = sys.exc_info()
+        print(ex_info[0], ex_info[1], flush=True)
+        print(traceback.format_exc(), flush=True)
         gauth = GoogleAuth()
         gauth.LocalWebserverAuth()
     return GoogleDrive(gauth)
@@ -75,4 +77,4 @@ while True:
     for f in fs:
         delete_file_from_drive(drive, f['id'])
     print(f'end delete old folders', flush=True)
-    time.sleep(30 * 60)
+    time.sleep(1 * 60)
