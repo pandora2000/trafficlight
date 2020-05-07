@@ -81,4 +81,4 @@ while True:
     for f in fs:
         delete_file_from_drive(drive, f['id'])
     print(f'end delete old folders', flush=True)
-    time.sleep(1 * 60)
+    time.sleep(30 * 60)
